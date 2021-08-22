@@ -1,0 +1,4 @@
+pandas==0.24.2
+pandas-gbq==0.13.1
+numpy
+httplib2
