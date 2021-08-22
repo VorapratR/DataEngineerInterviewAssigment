@@ -368,14 +368,13 @@ default_args = {
     'email_on_retry': False,
     'retries': 1,
     'retry_delay': timedelta(minutes=5),
-    'schedule_interval': timedelta(minutes=20),
 }
 
 dag = DAG(
     'data-eng-exam',
     default_args=default_args,
     description='Interview Challenge (Data Engineer) - 4 days',
-    schedule_interval=timedelta(days=1),
+    schedule_interval='*/20 * * * *',
 )
 start_airflow_task = DummyOperator(task_id='start', dag=dag)
 
