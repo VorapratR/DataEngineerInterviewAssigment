@@ -13,26 +13,33 @@ from datetime import timedelta
 
 
 class Config:
-    # POSTGRESQL_HOST = Variable.get("POSTGRESQL_HOST")
-    # POSTGRESQL_PORT = Variable.get("POSTGRESQL_PORT")
-    # POSTGRESQL_USER = Variable.get("POSTGRESQL_USER")
-    # POSTGRESQL_PASSWORD = Variable.get("POSTGRESQL_PASSWORD")
-    # POSTGRESQL_DB = Variable.get("POSTGRESQL_DB")
+    POSTGRESQL_EXAM_HOST = Variable.get("POSTGRESQL_EXAM_HOST")
+    POSTGRESQL_EXAM_PORT = Variable.get("POSTGRESQL_EXAM_PORT")
+    POSTGRESQL_EXAM_USER = Variable.get("POSTGRESQL_EXAM_USER")
+    POSTGRESQL_EXAM_PASSWORD = Variable.get("POSTGRESQL_EXAM_PASSWORD")
+    POSTGRESQL_EXAM_CMS_DB = Variable.get("POSTGRESQL_EXAM_CMS_DB")
+    POSTGRESQL_EXAM_PAYMENT_DB = Variable.get("POSTGRESQL_EXAM_PAYMENT_DB")
+    POSTGRESQL_EXAM_LIKESVC_DB = Variable.get("POSTGRESQL_EXAM_LIKESVC_DB")
 
-    # POSTGRESQL_TABLE = Variable.get("POSTGRESQL_TABLE")
-    # POSTGRESQL_TABLE_COLUMN_NAME = Variable.get("POSTGRESQL_TABLE_COLUMN_NAME")
-    # BUCKET_NAME = Variable.get("BUCKET_NAME")
-    # FOLDER_NAME = Variable.get("FOLDER_NAME")
-    # PROJECT_ID = Variable.get("PROJECT_ID")
+    POSTGRESQL_TEST_HOST = Variable.get("POSTGRESQL_TEST_HOST")
+    POSTGRESQL_TEST_PORT = Variable.get("POSTGRESQL_TEST_PORT")
+    POSTGRESQL_TEST_USER = Variable.get("POSTGRESQL_TEST_USER")
+    POSTGRESQL_TEXT_PASSWORD = Variable.get("POSTGRESQL_TEXT_PASSWORD")
+    POSTGRESQL_TEST_DB = Variable.get("POSTGRESQL_TEST_DB")
 
-    # CREDENTIALS_PATH = Variable.get("CREDENTIALS_PATH")
+    # POSTGRESQL_EXAM_HOST = "34.87.117.252"
+    # POSTGRESQL_EXAM_PORT = "5432"
+    # POSTGRESQL_EXAM_USER = "readuser"
+    # POSTGRESQL_EXAM_PASSWORD = "digital2021testing"
+    # POSTGRESQL_EXAM_CMS_DB = "cms"
+    # POSTGRESQL_EXAM_PAYMENT_DB = "payment"
+    # POSTGRESQL_EXAM_LIKESVC_DB = "likesvc"
 
-    POSTGRESQL_HOST = "35.247.174.171"
-    POSTGRESQL_PORT = "5432"
-    POSTGRESQL_USER = "exam"
-    POSTGRESQL_PASSWORD = "bluePiExam"
-    POSTGRESQL_DB = "postgres"
-    POSTGRESQL_TABLE = "users,user_log"
+    # POSTGRESQL_TEST_HOST = "6.tcp.ngrok.io"
+    # POSTGRESQL_TEST_PORT = "15026"
+    # POSTGRESQL_TEST_USER = "postgres"
+    # POSTGRESQL_TEXT_PASSWORD = "admin"
+    # POSTGRESQL_TEST_DB = "test"
 
 
 class Xcoms_class:
@@ -109,9 +116,7 @@ def execute_insert_count_like_to_db(conn, df, table):
 
 
 def execute_insert_payment_success_to_db(conn, df, table):
-    """
-    Using cursor.executemany() to insert the dataframe
-    """
+
     # Create a list of tupples from the dataframe values
     tuples = [tuple(x) for x in df.to_numpy()]
     # Comma-separated dataframe columns
@@ -134,9 +139,7 @@ def execute_insert_payment_success_to_db(conn, df, table):
 
 
 def execute_insert_book_to_db(conn, df, table):
-    """
-    Using cursor.executemany() to insert the dataframe
-    """
+
     # Create a list of tupples from the dataframe values
     tuples = [tuple(x) for x in df.to_numpy()]
     # Comma-separated dataframe columns
@@ -159,9 +162,7 @@ def execute_insert_book_to_db(conn, df, table):
 
 
 def execute_insert_episode_to_db(conn, df, table):
-    """
-    Using cursor.executemany() to insert the dataframe
-    """
+
     # Create a list of tupples from the dataframe values
     tuples = [tuple(x) for x in df.to_numpy()]
     # Comma-separated dataframe columns
@@ -186,10 +187,10 @@ def execute_insert_episode_to_db(conn, df, table):
 def get_episode():
     print("get_episode()")
     param_cms = {
-        "host": "34.87.117.252",
-        "database": "cms",
-        "user": "readuser",
-        "password": "digital2021testing"
+        "host": Config.POSTGRESQL_EXAM_HOST,
+        "database": Config.POSTGRESQL_EXAM_CMS_DB,
+        "user": Config.POSTGRESQL_EXAM_USER,
+        "password": Config.POSTGRESQL_EXAM_PASSWORD
     }
     conn_cms = connect(param_cms)
     column_ep_names = ["id", "book_id", "name"]
@@ -204,10 +205,10 @@ def get_episode():
 def get_behavior():
     print("get_behavior")
     param_like = {
-        "host": "34.87.117.252",
-        "database": "likesvc",
-        "user": "readuser",
-        "password": "digital2021testing"
+        "host": Config.POSTGRESQL_EXAM_HOST,
+        "database": Config.POSTGRESQL_EXAM_LIKESVC_DB,
+        "user": Config.POSTGRESQL_EXAM_USER,
+        "password": Config.POSTGRESQL_EXAM_PASSWORD
     }
     conn_like = connect(param_like)
     column_behavior_names = ["behavior", "episode_id", "timestamp"]
@@ -236,11 +237,11 @@ def insert_count_like_to_db():
     df = count_like()
     print(df.columns)
     param_like_count = {
-        "host": "6.tcp.ngrok.io",
-        "port": "15026",
-        "database": "test",
-        "user": "postgres",
-        "password": "admin"
+        "host": Config.POSTGRESQL_TEST_HOST,
+        "port": Config.POSTGRESQL_TEST_PORT,
+        "database": Config.POSTGRESQL_TEST_DB,
+        "user": Config.POSTGRESQL_TEST_USER,
+        "password": Config.POSTGRESQL_TEXT_PASSWORD
     }
     conn_test = connect(param_like_count)
     print('execute_insert_count_like_to_db')
@@ -250,10 +251,10 @@ def insert_count_like_to_db():
 
 def get_payment():
     param_payment = {
-        "host": "34.87.117.252",
-        "database": "payment",
-        "user": "readuser",
-        "password": "digital2021testing"
+        "host": Config.POSTGRESQL_EXAM_HOST,
+        "database": Config.POSTGRESQL_EXAM_PAYMENT_DB,
+        "user": Config.POSTGRESQL_EXAM_USER,
+        "password": Config.POSTGRESQL_EXAM_PASSWORD
     }
     # Connect to the database
     conn_payment = connect(param_payment)
@@ -295,11 +296,11 @@ def insert_payment_success_to_db():
     print(df.columns)
     print(df.head())
     param_test = {
-        "host": "6.tcp.ngrok.io",
-        "port": "15026",
-        "database": "test",
-        "user": "postgres",
-        "password": "admin"
+        "host": Config.POSTGRESQL_TEST_HOST,
+        "port": Config.POSTGRESQL_TEST_PORT,
+        "database": Config.POSTGRESQL_TEST_DB,
+        "user": Config.POSTGRESQL_TEST_USER,
+        "password": Config.POSTGRESQL_TEXT_PASSWORD
     }
     conn_test = connect(param_test)
     print('execute_insert_payment_success_to_db')
@@ -310,10 +311,10 @@ def insert_payment_success_to_db():
 
 def get_book():
     param_cms = {
-        "host": "34.87.117.252",
-        "database": "cms",
-        "user": "readuser",
-        "password": "digital2021testing"
+        "host": Config.POSTGRESQL_EXAM_HOST,
+        "database": Config.POSTGRESQL_EXAM_CMS_DB,
+        "user": Config.POSTGRESQL_EXAM_USER,
+        "password": Config.POSTGRESQL_EXAM_PASSWORD
     }
     # Connect to the database
     conn_cms = connect(param_cms)
@@ -329,11 +330,11 @@ def insert_book_to_db():
     print(df.columns)
     print(df.head())
     param_test = {
-        "host": "6.tcp.ngrok.io",
-        "port": "15026",
-        "database": "test",
-        "user": "postgres",
-        "password": "admin"
+        "host": Config.POSTGRESQL_TEST_HOST,
+        "port": Config.POSTGRESQL_TEST_PORT,
+        "database": Config.POSTGRESQL_TEST_DB,
+        "user": Config.POSTGRESQL_TEST_USER,
+        "password": Config.POSTGRESQL_TEXT_PASSWORD
     }
     conn = connect(param_test)
     print('execute_insert_book_to_db')
@@ -347,11 +348,11 @@ def insert_episode_to_db():
     print(df.columns)
     print(df.head())
     param_test = {
-        "host": "6.tcp.ngrok.io",
-        "port": "15026",
-        "database": "test",
-        "user": "postgres",
-        "password": "admin"
+        "host": Config.POSTGRESQL_TEST_HOST,
+        "port": Config.POSTGRESQL_TEST_PORT,
+        "database": Config.POSTGRESQL_TEST_DB,
+        "user": Config.POSTGRESQL_TEST_USER,
+        "password": Config.POSTGRESQL_TEXT_PASSWORD
     }
     conn = connect(param_test)
     print('execute_insert_episode_to_db')
@@ -367,7 +368,7 @@ default_args = {
     'email_on_retry': False,
     'retries': 1,
     'retry_delay': timedelta(minutes=5),
-    'schedule_interval': '@once',
+    'schedule_interval': timedelta(minutes=20),
 }
 
 dag = DAG(
